@@ -1,14 +1,15 @@
+#+ATTR_ORG: :width 300 :height 200
 * Introduction
-This repo will contain my code explorations with datasets available via the [[https://github.com/rfordatascience/tidytuesday][#TidyTuesday]] project. The idea is to evolve towards create a document based on literate programming principles, with the code side by side with the exploration / analysis.
+This repo will contain my code explorations with datasets available via the [[https://github.com/rfordatascience/tidytuesday][#TidyTuesday]] project. The idea is to evolve towards a document based on literate programming principles, with the code side by side with the exploration / analysis.
 
 The latest project is on top.
 
-** Tools
-I use ESS (and Emacs) for all my workflows. This is a single Org document containing each exploration under a heading, and code blocks enclosed within Org-babel headers. Scripts are tangled into the [[/00_scripts/][00_scripts]] folder.
+** Tools and Notes
+- I use ESS (and Emacs) for all my workflows. This is a single Org document containing each exploration under a heading, and code blocks enclosed within Org-babel headers.
+- Completed code snippets are tangled into scripts in the [[/00_scripts/][00_scripts]] folder.
 
-** TODO Export each project to separate Juypyter / Rmd notebooks for easy access.
-
-* Project 2: TV's Golden Age is real [[https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-01-08][link]]
+* Project 2: TV's Golden Age is real.
+** Dataset: [[https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-01-08][link]]
 ** Questions
 *** How many unique titles per genre?
 *** how many shows released every year, for each genre.
@@ -64,16 +65,19 @@ test2 <- test %>% select_if(vars(ends_with("_"))) %>% map(unique)
 test %>% select_if(is.factor)
 #+END_SRC
 ****
-* Project 1: Federal R&D spending by agency [[https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-02-12][link]]
+* Project 1: Federal R&D spending by agency.
 :PROPERTIES:
 :CREATED:  <2019-02-25 Mon 14:08>
 :END:
+** Dataset: [[https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-02-12][link]]
+** Notes
+The current code only explores only the portion of Climate Spending.
 ** Viz [[https://twitter.com/ShreyasRagavan/status/1100765886892265472][posted on Twitter]]
 ** Code
-#+BEGIN_SRC R :session tt :tangle ./00_scripts/p1_climate_spending.R
+#+BEGIN_SRC R :mkdirp yes :tangle ./00_scripts/p1_climate_spending.R :results graphics output :file ./99_img/climate_spend_fed.png :session tt
                                         # Loading libraries
 library("easypackages")
-libraries("tidyverse", "tidyquant", "gganimate")
+libraries("tidyverse", "tidyquant")
 
                                         # Reading in data directly from github
 climate_spend_raw  <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-02-12/climate_spending.csv", col_types = "cin")
@@ -140,6 +144,7 @@ climate_spend_plt_fn(climate_spend_dept_y,
                      caption = "#TidyTuesday:\nDataset 2019-02-12\nShreyas Ragavan"
                        )
 
+
 ## The remaining code is partially complete and is in place for further exploration planned in the future.
 
 ## Code to download all the data.
@@ -167,3 +172,4 @@ climate_spend_plt_fn(climate_spend_dept_y,
 #+END_SRC
 
 #+RESULTS:
+[[file:./99_img/climate_spend_fed.png]]

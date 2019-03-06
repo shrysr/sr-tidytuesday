@@ -1,9 +1,12 @@
+                                        # Loading libraries
 library("easypackages")
 libraries("tidyverse", "tidyquant", "gganimate")
 
+                                        # Reading in data directly from github
 climate_spend_raw  <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-02-12/climate_spending.csv", col_types = "cin")
 
 
+                                        # This initial conditioning need not have involved the date manipulation, as the year extracted from a date object is still a double.
 climate_spend_conditioned <- climate_spend_raw %>%
   mutate(year_dt = str_glue("{year}-01-01")) %>%
   mutate(year_dt = as.Date(year_dt)) %>%
