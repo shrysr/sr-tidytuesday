@@ -35,36 +35,50 @@ test <- tv_ratings_raw %>%
            into = c("genre1_", "genre2_", "genre3_"),
            sep = ',' ,
            remove = FALSE
-           )  %>%
-  select(ends_with("_")) %>%
-  map(unique)
+           ) # %>%
+  #select(ends_with("_")) %>%
+  #map(unique)
 
 
    ##mutate_at(vars(ends_with("_")), funs(as.factor))
 
 
 all_genres <-  test %>%
-  select(ends_with("_")) %>% gather(
-                               key = genres_col,
-                               value = genre_all,
-                               genre1_,
-                               genre2_,
-                               genre3_,
-                               na.rm = TRUE
-                             ) %>%
-  select(genre_all) %>%
-  unique()
+  select(ends_with("_")) %>%
+  gather(
+    key = genres_col,
+    value = genre_all,
+    genre1_,
+    genre2_,
+    genre3_,
+    na.rm = TRUE
+  )
 
-all_genres %>%  unique
+all_genres <- all_genres %>%
+  select(genre_all) %>% unique() %>%
+  spread(
+    key = genre_all,
+    value = genre_all
+  )
 
-all_genres %>% spread(
-                 key = genre_all
-                 )
+test[,names(all_genres)] <- 0
+
+"Adventure" == test$genre1_[5]
+
+function(data, col){
+  map(
+  data %>%
+    filter(str_detect(genre1_, col)) %>%
+    mutate(col = 1) %>%
+  }
+
+
+
 
 test2 <- test %>% select_if(vars(ends_with("_"))) %>% map(unique)
 test %>% select_if(is.factor)
 #+END_SRC
-****
+
 * Project 1: Federal R&D spending by agency.
 :PROPERTIES:
 :CREATED:  <2019-02-25 Mon 14:08>
@@ -172,4 +186,4 @@ climate_spend_plt_fn(climate_spend_dept_y,
 #+END_SRC
 
 #+RESULTS:
-[[file:./99_img/climate_spend_fed.png]]
+[[file:./99_img/climate_spend_fed.Png]]
