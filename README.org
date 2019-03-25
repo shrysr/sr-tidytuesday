@@ -150,11 +150,11 @@ tv_genre_y <- tv_ratings_genre_sep_tbl %>%
             av_rating,
             share,
             genres,
-            date)) %>% 
+            date)) %>%
   group_by(dt_year) %>%
   filter(!duplicated(titleId)) %>%
   summarise_if(.predicate = is.numeric,funs(sum(.))) %>%
-  ungroup() %>% 
+  ungroup() %>%
   arrange(desc(dt_year))
 #+END_SRC
 
@@ -182,16 +182,59 @@ all_genres <-  tv_ratings_raw %>%
     value = genre_all
   )
 
+
+
+
+key_terms <- all_genres %>% select(genre_all)  %>% count(genre_all)
+
+tv_ratings_raw %>% select(genres)
+
 tv_ratings_conditioned <- bind_rows(tv_ratings_raw, all_genres)
 
 tv_ratings_conditioned %>%
-  select(genres, Action:Western) %>%
 
 
+genre_flag_multi_fn <- function(data, search_col = genres, ... , flag_col )
+{
+  flag_col <- enquo(flag_col)
+  flag_col_name <- quo_name(flag_col)
+  search_col <- enquo(search_col)
+  search_pattern <- enquos(...)
+  ## search_pattern
+  ## ## print((!!!search_pattern))
+  ## vars(!!!search_pattern[2])
+
+  data %>%
+    mutate(expr(str_c(!!!flag_col_name, "_g")) := map(~ case_when(
+                                    expr(str_detect(!!search_col, !!!search_pattern))  ~ 1,
+                                    TRUE ~ 0
+                                  )
+                                  )
+                 )
+}
+
+
+tv_ratings_raw %>%
+  select(genres) %>%
+  genre_flag_multi_fn(search_pattern, flag_col = search_pattern)
+
+
+search_pattern <-
+  key_terms %>%
+  select(genre_all) %>%
+  spread(
+    key = genre_all,
+    value = genre_all
+  ) %>%
+  names()
+
+
+
+
+  key_terms %>% select(genre_all)
 #+END_SRC
 
 #+RESULTS:
-: /home/shrysr/my_projects/sr-tidytuesday
 
 * Project 1: Federal R&D spending by agency.
 :PROPERTIES:
